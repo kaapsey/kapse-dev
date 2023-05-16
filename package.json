@@ -1,0 +1,27 @@
+{
+  "name": "kapse-dev",
+  "version": "1.0.0",
+  "description": "<h1 align=\"center\">Kapse Dev</h1>",
+  "main": "index.js",
+  "dependencies": {
+    "typescript": "^5.0.4"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.1.5",
+    "typescript": "^5.0.4"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kaapsey/kapse-dev.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kaapsey/kapse-dev/issues"
+  },
+  "homepage": "https://github.com/kaapsey/kapse-dev#readme"
+}
