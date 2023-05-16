@@ -4,13 +4,17 @@
   "description": "<h1 align=\"center\">Kapse Dev</h1>",
   "main": "index.js",
   "dependencies": {
-    "typescript": "^5.0.4"
+    "prompts": "^2.4.2"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "bin": {
+    "kapse-dev": "build/index.js"
+  },
   "devDependencies": {
     "@types/node": "^20.1.5",
+    "@types/prompts": "^2.4.4",
     "typescript": "^5.0.4"
   },
   "repository": {
