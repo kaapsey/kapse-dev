@@ -1,4 +1,5 @@
 import prompts from 'prompts';
+import spawn from 'cross-spawn';
 
 type FrameWork = {
     name: string;
@@ -75,9 +76,10 @@ const FRAMEWORKS: FrameWork[] = [
 export async function init() {
     // const args = process.argv.slice(2);
 
-    let result;
+    let result: prompts.Answers<'projectName' | 'framework' | 'frameworkVariant' | 'cssVariant'>;
 
     try {
+        // get project name, framework, framework variant and css variant from user
         result = await prompts([
             {
                 type: 'text',
@@ -113,11 +115,76 @@ export async function init() {
             },
         ]);
     } catch (error: any) {
+        // handle cancellation
         console.log(error.message);
         return;
     }
 
-    // const { packageName } = result;
+    const { projectName, framework, frameworkVariant, cssVariant } = result;
 
-    console.log(result);
+    let command: string = '';
+
+    // get the command for creating the project based on framework
+    switch (framework) {
+        case 'react':
+            command = getViteCommand(projectName, frameworkVariant);
+            break;
+        case 'next':
+            command = getNextCommand(projectName, frameworkVariant, cssVariant);
+            break;
+    }
+
+    // scaffold the next or react project using vite or next cli
+    spawn.sync(command, { stdio: 'inherit', shell: true });
+}
+
+// get vite command for creating react or react-ts project
+function getViteCommand(projectName: string, frameworkVariant: string) {
+    let command: string = `npm create vite@latest ${projectName}`;
+
+    if(getNpmVersion() >= '7.0.0') {
+        command += ' --';
+    }
+
+    switch(frameworkVariant) {
+        case 'react-js':
+            command += ' --template react';
+            break;
+        case 'react-ts':
+            command += ' --template react-ts';
+            break;
+    }
+
+    return command;
+}
+
+// get next js command for creating next or next-ts project
+function getNextCommand(projectName: string, frameworkVariant: string, cssVariant: string) {
+    let command: string = `npx create-next-app ${projectName}`;
+
+    switch(frameworkVariant) {
+        case 'next-js':
+            command += ` --js --no-eslint --src-dir --app --import-alias @/*`;
+            break;
+        case 'next-ts':
+            command += ` --ts --no-eslint --src-dir --app --import-alias @/*`;
+            break;
+    }
+
+    switch(cssVariant) {
+        case 'chakra-ui':
+            command += ` --no-tailwind`;
+            break;
+        case 'tailwind-css':
+            command += ` --tailwind`;
+            break;
+    }
+
+    return command;
+}
+
+// get the version of npm installed
+function getNpmVersion() {
+    const npmVersion = spawn.sync('npm', ['-v']).stdout.toString().trim();
+    return npmVersion;
 }
