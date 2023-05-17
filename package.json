@@ -17,6 +17,7 @@
     "@types/cross-spawn": "^6.0.2",
     "@types/node": "^20.1.5",
     "@types/prompts": "^2.4.4",
+    "react-router-dom": "^6.11.1",
     "typescript": "^5.0.4"
   },
   "repository": {
