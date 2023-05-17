@@ -6,3 +6,4 @@ build
 
 # test
 test
+__tests__
