@@ -1,5 +1,7 @@
 import prompts from 'prompts';
 import spawn from 'cross-spawn';
+import path from 'path';
+import fs from 'fs';
 
 type FrameWork = {
     name: string;
@@ -136,6 +138,13 @@ export async function init() {
 
     // scaffold the next or react project using vite or next cli
     spawn.sync(command, { stdio: 'inherit', shell: true });
+
+    // use the user selected options to update the scaffold project to match the templates
+    // get the correct template directory path
+    const dir = getTemplateDir(framework, frameworkVariant, cssVariant);
+
+    // copy the template directory to the project directory
+    copyTemplate(dir, projectName);
 }
 
 // get vite command for creating react or react-ts project
@@ -187,4 +196,104 @@ function getNextCommand(projectName: string, frameworkVariant: string, cssVarian
 function getNpmVersion() {
     const npmVersion = spawn.sync('npm', ['-v']).stdout.toString().trim();
     return npmVersion;
+}
+
+// get the template directory according to selected framework, frameworkVariant and cssVariant
+function getTemplateDir(framework: string, frameworkVariant: string, cssVariant: string) {
+
+    // resolving the path to the template directory
+    let templateDir = 'templates';
+
+    switch(framework) {
+        case 'react':
+            templateDir += '/react/template-react';
+
+            if(frameworkVariant === 'react-ts') {
+                templateDir += '-ts';
+            }
+            break;
+        case 'next':
+            templateDir += '/next/template-next';
+            
+            if(frameworkVariant === 'next-ts') {
+                templateDir += '-ts';
+            }
+            break;
+    }
+
+    switch(cssVariant) {
+        case 'chakra-ui':
+            templateDir += '-chakra';
+            break;
+        case 'tailwind-css':
+            templateDir += '-tailwind';
+            break;
+    }
+    
+    // removing build from __dirname
+    const correctDir = __dirname.replace('build', '');
+
+    // return the resolved path
+    return path.resolve(correctDir, templateDir);
+}
+
+// copy the template directory to the project directory
+function copyTemplate(dir: string, projectName: string) {
+
+    // read the template directory and copy the files and directories to the project directory
+    fs.readdirSync(dir).forEach((file) => {
+        const filePath = path.join(dir, file);
+        const fileStat = fs.statSync(filePath);
+
+        if(fileStat.isFile()) {
+            fs.copyFileSync(filePath, path.join(projectName, file));
+        } else if(fileStat.isDirectory()) {
+
+            // ignore node_modules directory
+            if(file === 'node_modules') {
+                return;
+            }
+
+            // if config directory is present in the template directory, execute extra configuration
+            if(file === 'config') {
+                configuration(filePath, path.join(projectName));
+                return;
+            }
+
+            // check if the directory is present in the project directory, if not create it
+            if(!fs.existsSync(path.join(projectName, file))) {
+                fs.mkdirSync(path.join(projectName, file));
+            }
+
+            copyTemplate(filePath, path.join(projectName, file));
+        }
+    });
+}
+
+// extra configuration for the project
+function configuration(dir: string, projectDir: string) {
+    // get the config.json file from the template directory
+    const config = require(path.join(dir, 'config.json'));
+
+    // get the package.json file from the project directory
+    const packageJson = JSON.parse(fs.readFileSync(path.join(projectDir, 'package.json')).toString());
+
+    // leave all the package.json scripts as it is, and add scripts, dependencies and devDependencies from config.json
+    packageJson.scripts = {
+        ...packageJson.scripts,
+        ...config.package.scripts,
+    };
+
+    packageJson.dependencies = {
+        ...packageJson.dependencies,
+        ...config.package.dependencies,
+    };
+
+    packageJson.devDependencies = {
+        ...packageJson.devDependencies,
+        ...config.package.devDependencies,
+    };
+
+    // write the updated package.json file to the project directory
+    fs.writeFileSync(path.join(projectDir, 'package.json'), JSON.stringify(packageJson, null, 2));
 }
