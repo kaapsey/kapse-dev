@@ -1,14 +1,14 @@
 {
   "name": "kapse-dev",
-  "version": "1.0.0",
-  "description": "<h1 align=\"center\">Kapse Dev</h1>",
+  "version": "0.1.0",
+  "description": "CLI for creating React or Next.js project with either Tailwind CSS or Chakra UI, with or without TypeScript.",
   "main": "index.js",
   "dependencies": {
     "cross-spawn": "^7.0.3",
     "prompts": "^2.4.2"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "npx tsc && node build/index.js"
   },
   "bin": {
     "kapse-dev": "build/index.js"
