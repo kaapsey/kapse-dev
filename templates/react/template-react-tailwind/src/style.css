@@ -1,0 +1,27 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  h1 {
+    @apply text-3xl font-bold;
+  }
+}
+
+@layer components {
+  .primary {
+    @apply bg-primary-400 hover:bg-primary-600;
+  }
+  .secondary {
+    @apply bg-secondary-400 hover:bg-secondary-600;
+  }
+  .warn {
+    @apply bg-yellow-400 hover:bg-yellow-600;
+  }
+  .success {
+    @apply bg-green-400 hover:bg-green-600;
+  }
+  .danger {
+    @apply bg-red-400 hover:bg-red-600;
+  }
+}
