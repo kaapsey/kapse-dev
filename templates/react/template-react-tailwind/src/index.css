@@ -1,0 +1,70 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  h1 { @apply text-3xl font-bold; }
+  h2 { @apply text-2xl font-bold; }
+  h3 { @apply text-xl font-bold; }
+  h4 { @apply text-lg font-bold; }
+  h5 { @apply text-base font-bold; }
+  h6 { @apply text-sm font-bold; }
+}
+
+@layer components {  
+  /* start button */
+
+  /* variants */
+  .default {
+    @apply bg-slate-100 text-black hover:bg-slate-200;
+  }
+  .primary {
+    @apply bg-primary-400 hover:bg-primary-600;
+  }
+  .secondary {
+    @apply bg-secondary-400 hover:bg-secondary-600;
+  }
+  .warn {
+    @apply bg-yellow-400 hover:bg-yellow-600;
+  }
+  .success {
+    @apply bg-green-400 hover:bg-green-600;
+  }
+  .danger {
+    @apply bg-red-400 hover:bg-red-600;
+  }
+
+  /* end button */
+
+  /* ------------------------------------------------------------ */
+  /* start toast/alert */
+
+  /* type / variant */
+  .success-pop {
+    @apply bg-green-100 border-green-400;
+  }
+  .error-pop {
+    @apply bg-red-100 border-red-400;
+  }
+  .warn-pop {
+    @apply bg-yellow-100 border-yellow-400;
+  }
+
+  /* position */
+  .top-right {
+    @apply top-0 right-0;
+  }
+  .top-left {
+    @apply top-0 left-0 flex-row-reverse;
+  }
+  .bottom-right {
+    @apply bottom-0 right-0;
+  }
+  .bottom-left {
+    @apply bottom-0 left-0 flex-row-reverse;
+  }
+
+  /* end toast/alert */
+  /* ------------------------------------------------------------ */
+
+}
