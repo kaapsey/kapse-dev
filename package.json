@@ -2,7 +2,11 @@
   "name": "kapse-dev",
   "version": "0.1.0",
   "description": "CLI for creating React or Next.js project with either Tailwind CSS or Chakra UI, with or without TypeScript.",
-  "main": "index.js",
+  "main": "bin/index.js",
+  "files": [
+    "build",
+    "templates"
+  ],
   "dependencies": {
     "cross-spawn": "^7.0.3",
     "prompts": "^2.4.2"
@@ -27,7 +31,15 @@
     "type": "git",
     "url": "git+https://github.com/kaapsey/kapse-dev.git"
   },
-  "keywords": [],
+  "keywords": [
+    "boilerplate",
+    "starter",
+    "react",
+    "nextjs",
+    "tailwindcss",
+    "chakraui",
+    "typescript"
+  ],
   "author": "",
   "license": "ISC",
   "bugs": {
